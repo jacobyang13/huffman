@@ -86,17 +86,6 @@ public class EntropyCal {
 		// now wrap this input stream with the one given
 		InputStreamBitSource inputStream2 = new InputStreamBitSource(is2);
 		double compressedEntropy = 0;
-		for(int k = 0; k < 260; k++) {
-			try {
-				 inputStream2.next(8);
-			} catch (InsufficientBitsLeftException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
 		for(int i = 0; i < 256; i++) {
 			int lengTemp = 0;
 			double prob = (totalSymbolsC.get(i) * 1.0f) / (size);
@@ -129,17 +118,6 @@ public class EntropyCal {
 		// now wrap this input stream with the one given
 		InputStreamBitSource inputStream3 = new InputStreamBitSource(is3);
 		double compressedEntropy1 = 0;
-		for(int k = 0; k < 260; k++) {
-			try {
-				 inputStream3.next(8);
-			} catch (InsufficientBitsLeftException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
 		for(int i = 0; i < 256; i++) {
 			int lengTemp = 0;
 			double prob = (totalSymbolsC.get(i) * 1.0f) / (size);
