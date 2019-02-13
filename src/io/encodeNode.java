@@ -19,4 +19,11 @@ public class encodeNode {
 		this.occurence = leftT.occurence + rightT.occurence;
 		this.height = Math.max(leftT.height, rightT.height) + 1;
 	}
+	public boolean isLeaf() {
+		if(value == -1) {
+			return false;
+		}
+		
+		return true;
+	}
 }

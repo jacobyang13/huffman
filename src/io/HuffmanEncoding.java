@@ -12,6 +12,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.PriorityQueue;
 
+
+
 public class HuffmanEncoding {
 
 	public static void main(String[] args) throws InsufficientBitsLeftException, IOException {
@@ -85,49 +87,34 @@ public class HuffmanEncoding {
 	        	pq.add(parentN);
 	        }
 	        encodeNode rootE = pq.peek();
-	        int codeLengthArray[] = new int[256];
+
 	        
-	        
-	        codeLength(codeLengthArray, rootE, 0);
-	        /*for(int i = 0; i < codeLengthArray.length; i++) {
-	        	System.out.println(codeLengthArray[i]);
-	        }*/
-	        
-	    	ArrayList<Integer> sortedKeys = new ArrayList<Integer>();
+	      
+			
+	 
+	        //for(int i = 0; i < 256; i++) {
+	        //	System.out.println(codeLengthArray[i]);
+	       // }
+	        ArrayList<Integer> sortedKeys = new ArrayList<Integer>();
 			HashMap<Integer,ArrayList<Integer>> mapI = new HashMap<Integer,ArrayList<Integer>>();
+		     codeLength(sortedKeys, mapI, rootE, 0);
 			CTree canoTree = new CTree();
 			
-			for(int i = 0; i < 256;i++) {
-				if(!map.containsKey(codeLengthArray[i])) {
-					ArrayList<Integer> lengthTable = new ArrayList<Integer>();		
-					lengthTable.add(i);
-				    mapI.put(codeLengthArray[i], lengthTable);
-				    sortedKeys.add(codeLengthArray[i]);
-				}
-				//otherwise it already contains this amount of bits so you must insert into the existing key value, add into the arraylist
-				else if(map.containsKey(codeLengthArray[i])) {
-					ArrayList<Integer> tempTable = new ArrayList<Integer>();
-					//replacing old arrayList with the key, with a new arrayList here
-					tempTable = mapI.get(codeLengthArray[i]);
-					tempTable.add(i);
-					mapI.remove(codeLengthArray[i]);
-					mapI.put(codeLengthArray[i], tempTable);
-				}
-			}
+			
+			
 			Collections.sort(sortedKeys);
-			for(int keyLength: sortedKeys) {
-				ArrayList<Integer> temp = mapI.get(keyLength);
-				System.out.print("Length of Bit " + keyLength+" | ");
-				 for(int charValue : temp){
-			           System.out.print(charValue+" ");
-			            
-			        }
-			        System.out.println();
-			}//end of printing statement
+			
+			for(int keys : sortedKeys) {
+				Collections.sort(mapI.get(keys));
+			}
 			canoTree.createTree(sortedKeys,mapI);
+			
+			
+			
+			
 			String arrayS[] = new String[256];
-			encodedBits(rootE, arrayS, "");
-			OutputStream output = new FileOutputStream("encoded-text.txt");
+			encodedBits(canoTree.root, arrayS, "");
+			OutputStream output = new FileOutputStream("encoded-text1.txt");
 			OutputStreamBitSink outStream = new OutputStreamBitSink(output);
 			for(int i = 0; i < 256; i++) {
 				outStream.write( arrayS[i].length(),8);
@@ -163,18 +150,48 @@ public class HuffmanEncoding {
 	        //deque two at a time
 		
 	}//end of encode method
-	 public static void codeLength(int arrayL[], encodeNode root, int length) {
-     	if(root.value != -1) {
-     		arrayL[root.value] = length;
-     		return;
+	 public static void codeLength(ArrayList<Integer> sortedKeys, HashMap<Integer,ArrayList<Integer>> mapI , encodeNode root, int length) {
+     	if(root.isLeaf()) {
+     		int i = root.value;
+     		if(mapI.containsKey(length) == false) {
+				ArrayList<Integer> lengthTable = new ArrayList<Integer>();
+				lengthTable.add(i);
+			    mapI.put(length, lengthTable);
+			    sortedKeys.add(length);
+			    return;
+			}
+			//otherwise it already contains this amount of bits so you must insert into the existing key value, add into the arraylist
+			else if(mapI.containsKey(length) == true) {
+				ArrayList<Integer> tempTable = new ArrayList<Integer>();
+				//replacing old arrayList with the key, with a new arrayList here
+				tempTable = mapI.get(length);
+				tempTable.add(i);
+				mapI.remove(length);
+				mapI.put(length, tempTable);
+				return;
+			}
      	}
+     	else {
+     		codeLength(sortedKeys, mapI,root.left, length +1);
      	
-     		codeLength(arrayL, root.left, length +1);
-     	
-     	
-     		codeLength(arrayL, root.right, length +1);
+     		codeLength(sortedKeys, mapI,root.right, length +1);
+     	}
      }
-	public static void encodedBits(encodeNode root, String arrayS[], String codeWord) {
+	/*public static void findCodewordLengths(encodeNode node, HashMap<Integer, ArrayList<Integer>> codewordLengths, ArrayList<Integer> lengths, int depth) {
+		if(node.value != -1) {
+			if(codewordLengths.containsKey(depth)) {
+				codewordLengths.get(depth).add(node.value);
+			} else {
+				codewordLengths.put(depth, new ArrayList<Integer>());
+				codewordLengths.get(depth).add(node.value);
+				lengths.add(depth);
+			}
+		} else {
+			findCodewordLengths(node.left, codewordLengths, lengths, depth + 1);
+			findCodewordLengths(node.right, codewordLengths, lengths, depth + 1);
+		}
+	}*/
+	public static void encodedBits(Node root, String arrayS[], String codeWord) {
 		if(root.value != -1) {
 			arrayS[root.value] = codeWord;
 			return;

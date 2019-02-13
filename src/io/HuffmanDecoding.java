@@ -24,7 +24,7 @@ public class HuffmanDecoding {
 		InputStream is = null;
 
 		try {
-			is = new FileInputStream("data/encoded-text.txt");
+			is = new FileInputStream("data/encoded-text1.txt");
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -100,7 +100,7 @@ public class HuffmanDecoding {
 		//now decode the tree
 		Node rootT; 
 		int i = 0;
-		OutputStream output = new FileOutputStream("decoded-text1.txt");
+		OutputStream output = new FileOutputStream("decoded-text.txt");
 		OutputStreamBitSink outStream = new OutputStreamBitSink(output);
 		while(i < numSymb) {
 			rootT = canoTree.root;
