@@ -134,5 +134,6 @@ public class EntropyCal {
 			compressedEntropy1 += initCompressed1;
 		}
 		System.out.println("The compressed entropy is " + compressedEntropy1);
+		System.out.println("Look at word doc for answers");
 	}
 	}
